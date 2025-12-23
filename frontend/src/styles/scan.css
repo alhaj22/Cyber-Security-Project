@@ -1,0 +1,30 @@
+.scan-section {
+  text-align: center;
+  padding: 140px 20px 80px;
+}
+
+.scan-section input {
+  width: 320px;
+  padding: 14px;
+  background: var(--bg-card);
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  color: var(--text-main);
+}
+
+.scan-section button {
+  margin-left: 12px;
+  padding: 14px 22px;
+  background: var(--primary);
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.scan-result {
+  margin-top: 30px;
+  padding: 20px;
+  border-radius: 12px;
+  background: var(--bg-card);
+}

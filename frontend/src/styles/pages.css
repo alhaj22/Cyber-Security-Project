@@ -1,0 +1,14 @@
+.page-section {
+  max-width: 900px;
+  margin: 120px auto;
+  padding: 20px;
+}
+
+.page-section h1 {
+  color: var(--primary);
+  margin-bottom: 16px;
+}
+
+.page-section p {
+  color: #cbd5f5;
+}

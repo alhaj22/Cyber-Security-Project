@@ -1,14 +1,18 @@
-// components/Navbar.js
+import { Link } from "react-router-dom";
+
 function Navbar() {
   return (
     <nav className="navbar">
-      <h2>PhishGuard</h2>
-      <ul>
-        <li>Home</li>
-        <li>Scan</li>
-        <li>About Phishing</li>
-        <li>About Project</li>
+ <Link to="/" className="nav-logo">
+        PhishGuard
+      </Link>
+      <ul className="nav-links">
+        <li><Link to="/scan">Scan</Link></li>
+        <li><Link to="/about-phishing">About Phishing</Link></li>
+        <li><Link to="/about-project">About</Link></li>
       </ul>
+
+     
     </nav>
   );
 }

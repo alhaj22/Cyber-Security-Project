@@ -1,4 +1,3 @@
-// pages/Home.js
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import AboutPhishing from "../components/AboutPhishing";

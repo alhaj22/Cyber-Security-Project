@@ -1,0 +1,22 @@
+:root {
+  --bg-main: #020617;
+  --bg-card: #0f172a;
+  --primary: #38bdf8;
+  --text-main: #e5e7eb;
+  --text-muted: #94a3b8;
+  --safe: #22c55e;
+  --danger: #ef4444;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg-main);
+  color: var(--text-main);
+  font-family: 'Inter', system-ui, sans-serif;
+  line-height: 1.6;
+}
