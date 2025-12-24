@@ -1,7 +1,8 @@
 import { useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { checkWebsite } from "../services/api";
+import { scanURL } from "../services/api";   // 👈 SAME NAME
+
 
 function Scan() {
   const [url, setUrl] = useState("");
