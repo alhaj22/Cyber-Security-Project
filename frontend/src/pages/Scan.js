@@ -1,16 +1,26 @@
 import { useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { checkWebsite } from "../services/api";
+import { scanURL } from "../services/api"; // ✅ FIX HERE
 
 function Scan() {
   const [url, setUrl] = useState("");
   const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleScan = async () => {
     if (!url) return alert("Enter URL");
-    const data = await checkWebsite(url);
-    setResult(data);
+
+    try {
+      setLoading(true);
+      const response = await scanURL(url); // ✅ FIX HERE
+      setResult(response.data);            // axios response
+    } catch (err) {
+      console.error(err);
+      alert("Backend error");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -26,12 +36,15 @@ function Scan() {
           placeholder="https://example.com"
         />
 
-        <button onClick={handleScan}>Scan</button>
+        <button onClick={handleScan}>
+          {loading ? "Scanning..." : "Scan"}
+        </button>
 
         {result && (
           <div>
-            <p>Status: {result.risk}</p>
-            <p>{result.message}</p>
+            <p><strong>URL:</strong> {result.url}</p>
+            <p><strong>Risk Score:</strong> {result.risk_score}</p>
+            <p><strong>Reason:</strong> {result.reason}</p>
           </div>
         )}
       </section>
