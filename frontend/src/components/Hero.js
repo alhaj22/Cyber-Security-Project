@@ -1,14 +1,20 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Hero() {
   const [url, setUrl] = useState("");
+  const navigate = useNavigate();
 
   const handleScan = () => {
-    if (!url) {
+    if (!url.trim()) {
       alert("Please enter a website URL");
       return;
     }
-    console.log("Scanning:", url);
+
+    // 👉 Scan page pe bhej do
+    navigate("/scan", {
+      state: { url }
+    });
   };
 
   return (

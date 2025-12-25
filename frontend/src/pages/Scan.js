@@ -1,10 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { scanURL } from "../services/api";
 
 function Scan() {
-  const [url, setUrl] = useState("");
+  const location = useLocation();
+  const prefilledURL = location.state?.url || "";
+
+  const [url, setUrl] = useState(prefilledURL);
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -33,7 +37,6 @@ function Scan() {
       setResult(null);
 
       const response = await scanURL(url);
-      console.log("FINAL BACKEND RESPONSE:", response.data);
       setResult(response.data);
 
     } catch {
@@ -45,6 +48,14 @@ function Scan() {
       setLoading(false);
     }
   };
+
+  // 🔥 AUTO SCAN when coming from Hero
+  useEffect(() => {
+    if (prefilledURL) {
+      handleScan();
+    }
+    // eslint-disable-next-line
+  }, []);
 
   const getColor = (status) => {
     switch (status) {
