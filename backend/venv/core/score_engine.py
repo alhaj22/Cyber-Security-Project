@@ -177,7 +177,7 @@ class ScoreEngine:
             critical.append({
                 'severity': 'CRITICAL',
                 'category': 'SSL',
-                'description': 'No SSL certificate',
+                'description': '',
                 'impact': 'Insecure connection, data at risk'
             })
         elif ssl_data.get('risk_indicators', {}).get('domain_mismatch'):
@@ -250,12 +250,12 @@ class ScoreEngine:
         # Add top concern
         if critical_indicators:
             top_concern = critical_indicators[0]
-            base += f"Primary concern: {top_concern['description']}. "
+            base += f" {top_concern['description']}. "
         
         # Add module highlights
         high_risk_modules = [k for k, v in scores.items() if v > 70]
         if high_risk_modules:
-            base += f"High risk detected in: {', '.join(high_risk_modules).replace('_', ' ')}."
+            base += f"  {', '.join(high_risk_modules).replace('_', ' ')}."
         
         return base
     

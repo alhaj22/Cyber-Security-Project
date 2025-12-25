@@ -80,9 +80,9 @@ function Scan() {
           placeholder="https://example.com"
         />
 
-        <button onClick={handleScan} disabled={loading}>
-          {loading ? "Analyzing..." : "Scan Website"}
-        </button>
+<button onClick={handleScan} disabled={loading}>
+  {loading ? " Scanning Website..." : "Scan Website"}
+</button>
 
         {result && (
           <div

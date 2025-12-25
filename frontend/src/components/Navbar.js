@@ -8,7 +8,7 @@ function Navbar() {
       </Link>
       <ul className="nav-links">
         <li><Link to="/scan">Scan</Link></li>
-        <li><Link to="/about-phishing">About Phishing</Link></li>
+        <li><Link to="/about-phishing">Phishing Guide</Link></li>
         <li><Link to="/about-project">About</Link></li>
       </ul>
 
