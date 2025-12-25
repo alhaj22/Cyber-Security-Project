@@ -1,0 +1,12 @@
+{
+  "suspicious": [
+    { "asn": "AS24940", "name": "Hetzner", "risk": 40 },
+    { "asn": "AS14061", "name": "DigitalOcean", "risk": 35 },
+    { "asn": "AS16276", "name": "OVH", "risk": 35 }
+  ],
+  "clean": [
+    { "asn": "AS15169", "name": "Google", "risk": 5 },
+    { "asn": "AS8075", "name": "Microsoft", "risk": 5 },
+    { "asn": "AS16509", "name": "Amazon AWS", "risk": 10 }
+  ]
+}

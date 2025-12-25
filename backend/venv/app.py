@@ -1,62 +1,88 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-
-# 🔥 Import core analyzer
 from core import PhishRadarAnalyzer
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
-# 🔥 Proper CORS config for React
-CORS(
-    app,
-    resources={r"/*": {"origins": ["http://localhost:3000"]}},
-    supports_credentials=True
-)
-
-# 🔥 Single analyzer instance (IMPORTANT)
 analyzer = PhishRadarAnalyzer()
 
+def normalize_for_frontend(report: dict):
+    """
+    🔐 STRICT FRONTEND VERDICT NORMALIZATION
+    """
 
-@app.route("/", methods=["GET"])
-def home():
-    return jsonify({
-        "status": "Backend running",
-        "engine": "PhishRadar",
-        "version": "1.0.0"
-    })
+    verdict = report.get("verdict")
+    threat = report.get("threat_summary")
 
+    if verdict == "INVALID":
+        return {
+            "url": report.get("url"),
+            "status": "INVALID",
+            "reason": "Invalid or malformed URL."
+        }
 
-@app.route("/scan", methods=["POST", "OPTIONS"])
+    if verdict in ["CRITICAL", "HIGH"]:
+        return {
+            "url": report.get("url"),
+            "status": "NOT SAFE",
+            "reason": threat or "High-risk phishing indicators detected."
+        }
+
+    if verdict == "MEDIUM":
+        return {
+            "url": report.get("url"),
+            "status": "SUSPICIOUS",
+            "reason": threat or "Website shows suspicious behavior."
+        }
+
+    if verdict in ["LOW", "SAFE"]:
+        return {
+            "url": report.get("url"),
+            "status": "SAFE",
+            "reason": threat or "No significant phishing indicators detected."
+        }
+
+    # 🔥 FALLBACK (never call it SAFE)
+    return {
+        "url": report.get("url"),
+        "status": "SUSPICIOUS",
+        "reason": "Unable to confidently classify the website. Proceed with caution."
+    }
+    """
+    🔐 SINGLE FRONTEND CONTRACT
+    """
+    verdict = report.get("verdict", "ERROR")
+
+    verdict_map = {
+        "SAFE": "SAFE",
+        "LOW": "SAFE",
+        "MEDIUM": "SUSPICIOUS",
+        "HIGH": "NOT SAFE",
+        "CRITICAL": "NOT SAFE",
+        "INVALID": "INVALID",
+        "ERROR": "ERROR"
+    }
+
+    return {
+        "url": report.get("url"),
+        "status": verdict_map.get(verdict, "SUSPICIOUS"),
+        "reason": report.get("threat_summary", "No clear verdict available.")
+    }
+
+@app.route("/scan", methods=["POST"])
 def scan():
-    # Handle preflight request
-    if request.method == "OPTIONS":
-        return jsonify({"status": "ok"}), 200
-
     data = request.get_json(silent=True)
-    if not data:
-        return jsonify({"error": "Invalid JSON body"}), 400
-
-    url = data.get("url")
-    deep_scan = data.get("deep_scan", True)
-
-    if not url:
-        return jsonify({"error": "URL missing"}), 400
-
-    try:
-        # 🔥 Core engine call
-        result = analyzer.analyze(url, deep_scan=deep_scan)
-        return jsonify(result), 200
-
-    except Exception as e:
+    if not data or "url" not in data:
         return jsonify({
-            "error": "Analysis failed",
-            "details": str(e)
-        }), 500
+            "status": "INVALID",
+            "reason": "URL is required"
+        }), 400
 
+    raw_report = analyzer.analyze(data["url"])
+    frontend_response = normalize_for_frontend(raw_report)
+
+    return jsonify(frontend_response), 200
 
 if __name__ == "__main__":
-    app.run(
-        host="127.0.0.1",
-        port=5000,
-        debug=True
-    )
+    app.run(debug=True, port=5000)

@@ -28,3 +28,10 @@
   border-radius: 12px;
   background: var(--bg-card);
 }
+.scan-result {
+  margin-top: 20px;
+  padding: 16px;
+  background: #0f172a;
+  color: #fff;
+  border-radius: 8px;
+}

@@ -2,6 +2,8 @@
 PhishRadar Utilities
 Common helpers, decorators, logging, data loading, and security functions
 """
+import warnings
+warnings.filterwarnings("ignore", category=Warning)
 
 import logging
 import time
