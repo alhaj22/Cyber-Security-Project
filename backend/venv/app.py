@@ -1,16 +1,23 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-# 🔥 IMPORT YOUR CORE ANALYZER
+# 🔥 Import core analyzer
 from core import PhishRadarAnalyzer
 
 app = Flask(__name__)
-CORS(app)
 
-# 🔥 CREATE SINGLE ANALYZER INSTANCE
+# 🔥 Proper CORS config for React
+CORS(
+    app,
+    resources={r"/*": {"origins": ["http://localhost:3000"]}},
+    supports_credentials=True
+)
+
+# 🔥 Single analyzer instance (IMPORTANT)
 analyzer = PhishRadarAnalyzer()
 
-@app.route("/")
+
+@app.route("/", methods=["GET"])
 def home():
     return jsonify({
         "status": "Backend running",
@@ -18,9 +25,17 @@ def home():
         "version": "1.0.0"
     })
 
-@app.route("/scan", methods=["POST"])
+
+@app.route("/scan", methods=["POST", "OPTIONS"])
 def scan():
-    data = request.get_json()
+    # Handle preflight request
+    if request.method == "OPTIONS":
+        return jsonify({"status": "ok"}), 200
+
+    data = request.get_json(silent=True)
+    if not data:
+        return jsonify({"error": "Invalid JSON body"}), 400
+
     url = data.get("url")
     deep_scan = data.get("deep_scan", True)
 
@@ -28,14 +43,20 @@ def scan():
         return jsonify({"error": "URL missing"}), 400
 
     try:
-        # 🔥 CORE CONNECTION HERE
+        # 🔥 Core engine call
         result = analyzer.analyze(url, deep_scan=deep_scan)
-        return jsonify(result)
+        return jsonify(result), 200
+
     except Exception as e:
         return jsonify({
             "error": "Analysis failed",
             "details": str(e)
         }), 500
 
+
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(
+        host="127.0.0.1",
+        port=5000,
+        debug=True
+    )
