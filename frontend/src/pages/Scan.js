@@ -399,64 +399,6 @@ function Scan() {
                       </div>
                     )}
 
-                    {/* SSL/HTTPS Tab */}
-                    {/* SSL/HTTPS Tab */}
-{activeTab === "ssl" && d.ssl && (
-  <div className="tab-panel">
-    <h4>🔒 SSL/TLS Certificate</h4>
-    <div className="ssl-status">
-      <div className={`ssl-badge ${d.ssl.has_ssl ? "secure" : "insecure"}`}>
-        {d.ssl.has_ssl ? "🔒 HTTPS Enabled" : "⚠️ HTTP Only (Insecure)"}
-      </div>
-      {d.ssl.has_ssl && d.ssl.is_valid && (
-        <div className="ssl-badge secure">✓ Valid Certificate</div>
-      )}
-      {d.ssl.has_ssl && !d.ssl.is_valid && (
-        <div className="ssl-badge insecure">✗ Invalid Certificate</div>
-      )}
-    </div>
-
-    <div className="detail-grid">
-      <div className="detail-item">
-        <strong>SSL Present:</strong> <span style={{color: d.ssl.has_ssl ? "#16a34a" : "#dc2626"}}>
-          {d.ssl.has_ssl ? "Yes ✓" : "No ✗"}
-        </span>
-      </div>
-      {d.ssl.has_ssl && (
-        <>
-          <div className="detail-item">
-            <strong>Valid Certificate:</strong> {d.ssl.is_valid ? "Yes ✓" : "No ✗"}
-          </div>
-          <div className="detail-item">
-            <strong>Domain Match:</strong> {d.ssl.domain_matches ? "Yes ✓" : "No ✗"}
-          </div>
-          <div className="detail-item">
-            <strong>Self-Signed:</strong> {d.ssl.is_self_signed ? "Yes ⚠️" : "No ✓"}
-          </div>
-          <div className="detail-item">
-            <strong>Expired:</strong> {d.ssl.is_expired ? "Yes ✗" : "No ✓"}
-          </div>
-          <div className="detail-item">
-            <strong>Days Until Expiry:</strong> 
-              <span style={{color: d.ssl.days_remaining < 30 ? "#f59e0b" : "#16a34a"}}>
-                {d.ssl.days_remaining} days
-              </span>
-          </div>
-          <div className="detail-item">
-            <strong>Issuer:</strong> {d.ssl.issuer?.commonName || "Unknown"}
-          </div>
-        </>
-      )}
-    </div>
-
-    {d.ssl.error && (
-      <div className="alert error">
-        <strong>SSL Error:</strong> {d.ssl.error}
-      </div>
-    )}
-  </div>
-)}
-
                     {/* WHOIS Tab */}
                     {activeTab === "whois" && d.whois && (
                       <div className="tab-panel">
